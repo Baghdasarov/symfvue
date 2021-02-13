@@ -12,7 +12,11 @@ import './styles/app.css';
 import './bootstrap';
 
 import Vue from "vue";
+import axios from 'axios';
+import VueAxios from 'vue-axios'
 import Hotels from "./pages/hotels"
+
+Vue.use(VueAxios, axios)
 
 new Vue({
     render: h => h(Hotels)
