@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210213045903 extends AbstractMigration
+final class Version20210213061201 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -20,12 +20,16 @@ final class Version20210213045903 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE review (id INT AUTO_INCREMENT NOT NULL, score SMALLINT NOT NULL, comment LONGTEXT NOT NULL, created_date DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE review ADD hotel_id INT NOT NULL');
+        $this->addSql('ALTER TABLE review ADD CONSTRAINT FK_794381C63243BB18 FOREIGN KEY (hotel_id) REFERENCES hotel (id)');
+        $this->addSql('CREATE INDEX IDX_794381C63243BB18 ON review (hotel_id)');
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE review');
+        $this->addSql('ALTER TABLE review DROP FOREIGN KEY FK_794381C63243BB18');
+        $this->addSql('DROP INDEX IDX_794381C63243BB18 ON review');
+        $this->addSql('ALTER TABLE review DROP hotel_id');
     }
 }
