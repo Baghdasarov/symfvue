@@ -51,7 +51,7 @@ class ReviewRepository extends ServiceEntityRepository
 
     public function getGroupedScoreForHotel(Hotel $hotel): array
     {
-        $sql = "select DATE(created_date) as date, avg(score) as score
+        $sql = "select DATE(created_date) as date, avg(score) as score, count(score) as count
                 from review
                 where hotel_id = ?
                 group by date;";
