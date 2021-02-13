@@ -1,14 +1,27 @@
 <template>
-  <h1>{{ foo }}</h1>
+  <select name="hotel" v-model="hotel" id="hotel">
+    <option :value="null" selected>Select hotel</option>
+    <option :value="id" :key="id" v-for="(name, id) in hotels">{{name}}</option>
+  </select>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Hotels",
   data() {
     return {
-      foo: 'bar'
+      hotel: null,
+      hotels: []
     }
+  },
+  mounted() {
+    const self = this;
+
+    axios.get('/hotels').then(res => {
+      self.hotels = res['data']['data']
+    })
   }
 }
 </script>
