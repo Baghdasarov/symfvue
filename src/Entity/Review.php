@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ReviewRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,12 +17,6 @@ class Review
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Hotel::class, inversedBy="reviews")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $hotel_id;
 
     /**
      * @ORM\Column(type="smallint")
@@ -38,21 +33,15 @@ class Review
      */
     private $created_date;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Hotel::class, inversedBy="reviews")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $hotel;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getHotelId(): ?Hotel
-    {
-        return $this->hotel_id;
-    }
-
-    public function setHotelId(?Hotel $hotel_id): self
-    {
-        $this->hotel_id = $hotel_id;
-
-        return $this;
     }
 
     public function getScore(): ?int
@@ -79,14 +68,26 @@ class Review
         return $this;
     }
 
-    public function getCreatedDate(): ?\DateTimeInterface
+    public function getCreatedDate(): ?DateTimeInterface
     {
         return $this->created_date;
     }
 
-    public function setCreatedDate(\DateTimeInterface $created_date): self
+    public function setCreatedDate(DateTimeInterface $created_date): self
     {
         $this->created_date = $created_date;
+
+        return $this;
+    }
+
+    public function getHotel(): ?Hotel
+    {
+        return $this->hotel;
+    }
+
+    public function setHotel(?Hotel $hotel): self
+    {
+        $this->hotel = $hotel;
 
         return $this;
     }
