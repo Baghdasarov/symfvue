@@ -81,6 +81,9 @@
     "egulias/email-validator": {
         "version": "2.1.25"
     },
+    "fakerphp/faker": {
+        "version": "v1.13.0"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },
@@ -513,5 +516,11 @@
     },
     "webmozart/assert": {
         "version": "1.9.1"
+    },
+    "zenstruck/callback": {
+        "version": "v1.2.0"
+    },
+    "zenstruck/foundry": {
+        "version": "v1.7.1"
     }
 }
