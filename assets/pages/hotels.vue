@@ -1,5 +1,5 @@
 <template>
-  <select name="hotel" v-model="hotel" id="hotel">
+  <select name="hotel" v-model="hotel" id="hotel" v-on:change="fetchReviews">
     <option :value="null" selected>Select hotel</option>
     <option :value="id" :key="id" v-for="(name, id) in hotels">{{name}}</option>
   </select>
@@ -13,15 +13,22 @@ export default {
   data() {
     return {
       hotel: null,
-      hotels: []
+      hotels: [],
+      scores: []
     }
   },
   mounted() {
-    const self = this;
+    axios.get('/hotels').then(res => this.hotels = res['data']['data'])
+  },
+  methods: {
+    fetchReviews(){
+      if (!this.hotel) {
+        this.scores = [];
+        return;
+      }
 
-    axios.get('/hotels').then(res => {
-      self.hotels = res['data']['data']
-    })
+      axios.get(`/reviews/${this.hotel}`).then(res => this.scores = res['data'])
+    }
   }
 }
 </script>
