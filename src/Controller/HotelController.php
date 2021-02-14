@@ -6,6 +6,8 @@ use App\Entity\Hotel;
 use App\Entity\Review;
 use App\Repository\HotelRepository;
 use App\Repository\ReviewRepository;
+use DateTimeImmutable;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,10 +46,12 @@ class HotelController extends AbstractController
 
     /**
      * @Route("/reviews/{id}", name="hotels.reivews")
-     * @return JsonResponse
      * @var int $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function reviews(int $id): JsonResponse
+    public function reviews(int $id, Request $request): JsonResponse
     {
         /** @var HotelRepository $hotelRepository */
         $hotelRepository = $this->getDoctrine()->getRepository(Hotel::class);
@@ -58,9 +62,12 @@ class HotelController extends AbstractController
             return new JsonResponse(['message' => 'not found'], 404);
         }
 
+        $from = $request->get('from') ? new DateTimeImmutable($request->get('from')) : null;
+        $to = $request->get('to') ? new DateTimeImmutable($request->get('to')) : null;
+
         /** @var ReviewRepository $reviewRepository */
         $reviewRepository = $this->getDoctrine()->getRepository(Review::class);
 
-        return new JsonResponse($reviewRepository->getGroupedScoreForHotel($hotel));
+        return new JsonResponse($reviewRepository->getGroupedScoreForHotel($hotel, $from, $to));
     }
 }

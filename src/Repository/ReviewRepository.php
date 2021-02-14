@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Hotel;
 use App\Entity\Review;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -49,15 +50,31 @@ class ReviewRepository extends ServiceEntityRepository
     }
     */
 
-    public function getGroupedScoreForHotel(Hotel $hotel): array
+    public function getGroupedScoreForHotel(
+        Hotel $hotel,
+        ?DateTimeImmutable $from = null,
+        ?DateTimeImmutable $to = null
+    ): array
     {
         $sql = "select DATE(created_date) as date, avg(score) as score, count(score) as count
                 from review
-                where hotel_id = ?
-                group by date;";
+                where hotel_id = ?";
+        $params = [$hotel->getId()];
+
+        if ($from !== null) {
+            $sql .= ' and created_date >= ?';
+            $params[] = $from->format('Y-m-d');
+        }
+
+        if ($to !== null) {
+            $sql .= ' and created_date <= ?';
+            $params[] = $to->format('Y-m-d');
+        }
+
+        $sql .= ' group by date;';
 
         $em = $this->getEntityManager();
-        $stmt = $em->getConnection()->executeQuery($sql, [$hotel->getId()]);
+        $stmt = $em->getConnection()->executeQuery($sql, $params);
 
         return $stmt->fetchAllAssociative();
     }
