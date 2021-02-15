@@ -29,7 +29,7 @@ class Review
     private $comment;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     private $created_date;
 
