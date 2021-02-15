@@ -56,6 +56,42 @@ class ReviewRepository extends ServiceEntityRepository
         ?DateTimeImmutable $to = null
     ): array
     {
+        $builder = $this->createQueryBuilder('r');
+
+        $builder->select('r.created_date as date, avg(r.score) as score, count(r.score) as count');
+        $builder->andWhere('r.hotel = :hotel');
+        $builder->setParameter('hotel', $hotel->getId());
+
+        if ($from) {
+            $builder->andWhere('r.created_date >= :from');
+            $builder->setParameter('from', $from->format('Y-m-d'));
+        }
+
+        if ($to) {
+            $builder->andWhere('r.created_date <= :to');
+            $builder->setParameter('to', $to->format('Y-m-d'));
+        }
+
+        $builder->groupBy('date');
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param Hotel $hotel
+     * @param DateTimeImmutable|null $from
+     * @param DateTimeImmutable|null $to
+     * @return array
+     * @throws \Doctrine\DBAL\Driver\Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @deprecated
+     */
+    public function getGroupedScoreForHotelWithDateCasting(
+        Hotel $hotel,
+        ?DateTimeImmutable $from = null,
+        ?DateTimeImmutable $to = null
+    ): array
+    {
         $sql = "select DATE(created_date) as date, avg(score) as score, count(score) as count
                 from review
                 where hotel_id = ?";
