@@ -28,9 +28,9 @@ class HotelController extends AbstractController
 
     /**
      * @Route("/hotels", name="hotels")
-     * @return Response
+     * @return JsonResponse
      */
-    public function hotels(): Response
+    public function hotels(): JsonResponse
     {
         /** @var HotelRepository $hotelRepository */
         $hotelRepository = $this->getDoctrine()->getRepository(Hotel::class);
