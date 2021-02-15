@@ -4,8 +4,8 @@
       <option :value="null" selected>Select hotel</option>
       <option :value="id" :key="id" v-for="(name, id) in hotels">{{ name }}</option>
     </select>
-    <datepicker placeholder="From" v-model="dateFrom" v-on:selected="fetchReviews"></datepicker>
-    <datepicker placeholder="To" v-model="dateTo" v-on:selected="fetchReviews"></datepicker>
+    <datepicker placeholder="From" v-model="dateFrom"></datepicker>
+    <datepicker placeholder="To" v-model="dateTo"></datepicker>
 
     <review-chart :chartdata="chartScores" :width="5" :height="1"/>
   </div>
@@ -21,6 +21,14 @@ export default {
   components: {
     Datepicker,
     ReviewChart
+  },
+  watch: {
+    dateFrom() {
+      this.fetchReviews()
+    },
+    dateTo() {
+      this.fetchReviews()
+    }
   },
   data() {
     return {
