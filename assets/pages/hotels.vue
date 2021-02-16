@@ -62,9 +62,15 @@ export default {
   },
   computed: {
     chartScores() {
+      let labels = [];
+      this.scores.map(i => {
+        labels.push(i['date']['date'])
+      })
+
       return {
-        labels: this.scores.map(i => i['date']),
+        labels: labels,
         datasets: [{
+          label: 'Label',
           data: this.scores.map(i => i['score']),
         }]
       }

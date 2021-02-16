@@ -70,7 +70,7 @@ class Review
 
     public function getCreatedDate(): ?DateTimeInterface
     {
-        return $this->created_date;
+        return $this->created_date->format('Y-m-d');
     }
 
     public function setCreatedDate(DateTimeInterface $created_date): self
